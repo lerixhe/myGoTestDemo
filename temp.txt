@@ -1,0 +1,34 @@
+ID_Aceh  亚齐特区  ID_Sumatra  Sumatra
+ID_Bali  巴厘省  ID_xx  Bali&Nusa tenggara
+ID_Bangka-Belitung  邦加勿里洞  ID_xx  Sumatra
+ID_Banten  万丹  ID_West-Java  Jawa
+ID_Bengkulu  明古鲁  ID_Sumatra  Sumatra
+ID_Central-Java  中爪哇  ID_Mid-Java  Jawa
+ID_Central-Kalimantan  中加里曼丹  ID_xx  Kalimantan
+ID_Central-Sulawesi  中苏拉威西  ID_xx  Sulawesi-Maluku-Papua
+ID_East-Java  东爪哇  ID_East-Java  Jawa
+ID_East-Kalimantan  东加里曼丹  ID_xx  Kalimantan
+ID_East-Nusa-Tenggara  东努沙登加拉  ID_xx  Bali&Nusa tenggara
+ID_Gorontalo  哥伦打洛  ID_xx  Sulawesi-Maluku-Papua 
+ID_Jakarta  大雅加达  ID_West-Java  Jawa
+ID_Jambi  占碑省  ID_Sumatra Sumatra
+ID_Lampung  楠榜省  ID_Sumatra  Sumatra
+ID_Maluku  马鲁古  ID_xx Sulawesi-Maluku-Papua
+ID_North-Kalimantan  北加里曼丹  ID_xx  Kalimantan
+ID_North-Maluku  北马鲁古  ID_xx  Sulawesi-Maluku-Papua
+ID_North-Sulawesi  北苏拉威西  ID_xx  Sulawesi-Maluku-Papua
+ID_North-Sumatra  北苏门答腊  ID_Sumatra  Sumatra
+ID_Papua  巴布亚  ID_xx  Sulawesi-Maluku-Papua
+ID_Riau  廖内省  ID_Sumatra  Sumatra
+ID_Riau-Islands  廖内群岛  ID_Sumatra  Sumatra
+ID_South-East-Sulawesi  东南苏拉威西  ID_xx  Sulawesi-Maluku-Papua
+ID_South-Kalimantan  南加里曼丹  ID_xx  Kalimantan
+ID_South-Sulawesi  南苏拉威西  ID_xx  Sulawesi-Maluku-Papua
+ID_South-Sumatra  南苏门答腊  ID_Sumatra  Sumatra
+ID_West-Java  西爪哇  ID_West-Java  Jawa
+ID_West-Kalimantan  西加里曼丹  ID_xx  Kalimantan
+ID_West-Nusa-Tenggara  西努沙登加拉  ID_xx  Bali&Nusa tenggara
+ID_West-Papua  西巴布亚  ID_xx  Sulawesi-Maluku-Papua
+ID_West-Sulawesi  西苏拉威西  ID_xx  Sulawesi-Maluku-Papua
+ID_West-Sumatra  西苏门答腊  ID_Sumatra  Sumatra
+ID_Yogyakarta  日惹特区  ID_East-Java  Jawa
