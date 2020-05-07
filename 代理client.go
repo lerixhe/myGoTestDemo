@@ -19,7 +19,7 @@ func main() {
 	password := ""
 
 	// 代理服务器
-	proxy_raw := "220.171.90.158:8060"
+	proxy_raw := "49.232.158.99:8048"
 	proxy_str := fmt.Sprintf("http://%s:%s@%s", username, password, proxy_raw)
 	proxy, err := url.Parse(proxy_str)
 
