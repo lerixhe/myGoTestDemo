@@ -1,43 +1,59 @@
+package main
 
-代码段如下：
+import (
+	"log"
+	"sync"
+)
 
-	// 2020/04/29 11:46:58.675 [I] [serverCheck.go:29]  total speedtest servers count: 26693
-	logs.Info("total speedtest servers count:", len(speedtestIPs))
-	// use channel to limit the max request count as the same time
-	limitChan := make(chan int, maxRequestLimit)
+func main() {
+	strSlice := make([]string, 0, 1000)
+	n := 1000
+	log.Printf("length of strSlice %d,before", len(strSlice))
 	// use waitgroup to wait all goroutines finished
 	wg := &sync.WaitGroup{}
-	wg.Add(len(speedtestIPs))
-	for _, speedtestIP := range speedtestIPs {
-		limitChan <- 1
-		go func(speedtestIP models.SpeedtestInfo) {
-			speedtestStatus := models.SpeedtestStatus{
-				ID:        speedtestIP.ID,
-				Status:    1,
-				UpdatedAt: now,
-			}
-			if !CheckHost(speedtestIP, time.Duration(timeout)) {
-				speedtestStatus.Status = 0
-			}
-			<-limitChan
+	wg.Add(n)
+	for i := 0; i < n; i++ {
+		go func(str string) {
+			strSlice = append(strSlice, str)
 			wg.Done()
-			speedtestIPsStatus = append(speedtestIPsStatus, speedtestStatus)
-		}(speedtestIP)
+		}("8")
 	}
 	wg.Wait()
 	//插入
-	// 2020/04/29 11:48:09.091 [I] [serverCheck.go:55]  finish check total 26686 speedtest servers
-	logs.Info("finish check total %d speedtest servers", len(speedtestIPsStatus))
+	log.Printf("length of strSlice %d,after append", len(strSlice))
+	log.Println(strSlice)
+	wg2 := &sync.WaitGroup{}
+	wg2.Add(len(strSlice))
+	for i, _ := range strSlice {
+		go func() {
+			strSlice[i] = "7"
+			wg2.Done()
+		}()
+	}
+	wg2.Wait()
+	//插入
+	log.Printf("length of strSlice %d,after change", len(strSlice))
+	log.Println(strSlice)
 
+}
 
+// D:\myGoTestDemo>go run 切片的协程并发安全问题.go
+// 2020/07/14 16:58:41 length of strSlice 0,before
+// 2020/07/14 16:58:41 length of strSlice 995,after append
+// 2020/07/14 16:58:41 [8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8]
+// 2020/07/14 16:58:41 length of strSlice 995,after change
+// 2020/07/14 16:58:41 [8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 7 7 7 7 7 8 8 8 7 7 8 7 8 8 7 8 8 7 8 7 8 8 7 8 7 8 8 7 8 7 8 7 8 7 8 8 8 7 8 7 8 7 7 7 7 7 8 7 8 7 7 8 8 7 8 7 7 7 7 8 7 7 7 7 8 8 7 8 7 7 7 8 7 8 8 7 8 7 7 8 8 8 8 8 7 7 7 8 8 8 7 7 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 7 7 8 7 7 8 8 8 8 7 8 7 8 7 8 7 8 7 8 8 8 7 7 8 7 8 8 8 7 8 7 7 7 7 8 7 7 8 7 8 8 7 8 7 8 7 7 7 8 7 8 8 7 8 7 7 7 8 8 7 8 7 8 7 7 7 7 7 7 8 7 7 7 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 7 7 8 8 7 8 7 7 8 7 7 8 7 8 8 8 7 8 7 7 8 7 7 7 8 7 7 7 7 7 7 8 7 7 8 7 7 8 7 7 7 7 7 7 8 7 7 7 7 7 8 8 7 7 8 7 7 8 8 8 7 8 7 7 8 7 8 8 7 7 7 7 8 7 8 7 7 8 7 7 7 7 8 8 7 8 7 7 7 7 7 7 7 8 8 7 7 7 7 7 7 7 7 8 8 7 7 7 8 8 7 7 7 7 8 7 7 7 7 8 8 7 7 7 8 7 7 7 8 8 7 7 8 7 7 7 7 8 7 8 7 7 7 7 7 7 7 8 7 8 7 7 7 7 7 7 8 7 7 8 7 7 8 7 7 7 8 7 7 7 8 7 8 7 7 7 7 7 8 7 7 7 8 7 7 7 7 8 7 7 7 7 7 7 8 7 7 8 7 7 7 7 7 7 8 7 8 7 8 7 7 7 7 7 7 7 7 7 7 7 8 7 7 8 7 7 8 7 8 8 7 7 8 7 7 8 7 7 7 7 8 7 7 7 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 7 7 7 7 8 7 7 7 7 7 7 7 7 7 7 7 7 7 7 8 7 7 7 7 7 8 7 7 7 7 7 7 7 8 7 7 8 7 7 8 7 7 7 7 7 8 7 7 7 7 7 7 7 7 7 7 7 7 8 7 7 7 7 7 7 7 8 7 8 8 8 8 8 8 7 8 8 8 8 8 8 8 8 8 7 8 8 8 7 8 7 8 7 8 7 7 7 7 7 7 7 7 7 8 8 7 7 7 8 7 7 8 7 7 7 8 7 8 7 7 7 7 7 7 7 8 7 7 7 8 7 7 8 8 8 7 8 7 7 7 7 8 7 7 8 8 7 8 7 7 7 7 7 8 7 8 7 8 7 7 7 8 7 7 7 7 7 8 8 8 7 7 8 7 8 7 7 8 8 7 7 7 7 8 7 7 8 7 7 8 7 7 7 7 8 7 8 8 7 7 8 7 7 7 7 7 7 8 7 7 8 7 8 7 7 7 7 8 7 8 7 7 8 7 7 7 7 7 8 7 7 8 7 7 7 7 8 8 7 7 8 8 8 7 7 7 8 7 8 8 7 8 7 7 7 8 8 7 8 7 7 8 8 8 7 8 8 7 7 7 7 7 8 7 7 7 7 7 7 7 7 7 7 7 8 7 8 7 7 8 8 8 7 7 7 7 8 7 8 7 7 8 7 7 7 7 7 8 8 7 8 7 8 7 8 7 7 7 7 7 7 7 8 7 8 8 8 8 7 8 7 7 8 7 8 7 8 7 7 7 8 7 8 7 7 8 7 7 7 7 7 7 8 7 7 7 8 7 7 7 7 8 7 7 7 8 7 8 8 7 8 8 7 7 7 8 7 8 8 7 7 7 7 7 7 7 8 8 7 7 8 7 7 7 7 7 8 7 8 7 7 7 7 7 7 7 7 7 7 7 8 7 7 7 7 7 8 7 7 7 7 7]
 
-	总结：切片的append函数并非并发安全的。
-	本代码段，起n个goroutine并发的向slice中append数据，n个goroutine都结束后，打印slice的长度。
-	发现len(slice)<n.
-	原因：slice是对数组一个连续片段的引用，当slice长度增加的时候，可能底层的数组会被换掉。
-	当出在换底层数组之前，切片同时被多个goroutine拿到，并执行append操作。那么很多goroutine的append结果会被覆盖，导致n个gouroutine append后，长度小于n。
+// 总结：切片的append函数并非并发安全的
+// 本代码段，起n个goroutine并发的向slice中append数据，n个goroutine都结束后，打印slice的长度。
+// 发现len(slice)<n.
+// 原因：slice是对数组一个连续片段的引用，当slice长度增加的时候，可能底层的数组会被换掉。
+// 当出在换底层数组之前，切片同时被多个goroutine拿到，并执行append操作。那么很多goroutine的append结果会被覆盖，导致n个gouroutine append后，长度小于n。
+// 然而，经测试发现，并发赋值也非并发安全。Orz给跪了！
 
-
-	解决方案：
-	1.加锁，性能有影响
-	2.使用生产者消费者的多对一模型，所有生产者不自己append，而是写入管道。由一个专门的消费者线程执行append
+// 解决方案：
+// 1.加锁，性能有影响
+// 2.使用生产者消费者的多对一模型，所有生产者不自己append，而是写入管道。由一个专门的消费者线程执行append
+// 3.ps，对于append并发安全问题，可能会想到增大cap防止新内存的分配，来防止并发安全问题。经实际测试
+// 当并发量较小时，比如100，确实不会出现问题。但当并发量打了比如500，依旧会出现问题，怀疑是当分配较大的cap时，golang内部机制并未实际给予的原因。
+// 总之此方案不优雅，更不靠谱
