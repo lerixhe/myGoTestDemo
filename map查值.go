@@ -12,4 +12,8 @@ func main() {
 		fmt.Println("not ok")
 	}
 
+	m1 := make(map[string]*int)
+	r := m1["d"]
+	fmt.Println(r)
+
 }
