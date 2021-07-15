@@ -22,8 +22,8 @@ func main() {
 	fmt.Println(s1 == s3)
 	// true
 	// true
-	// struct是类型。创建一样的struct,值相等
-	// fmt.Println(A > B) //func can only be compared to nil. operator > not defined on func
+	// struct是值类型。创建一样的struct,值相等
+	// fmt.Println(A > B) //func can only be compared to nil. operator    > not defined on func
 	fmt.Println("a" > "b")
 	// a := "a"
 	// fmt.Println(s1 == nil)
